@@ -20,5 +20,15 @@ class Node
     node.adjacent_nodes << self
   end
 
+  def info
+    puts node.name
+    if adjacent_nodes.empty?
+      puts "No adjacent nodes!"
+    else
+      puts "Adjacent nodes are:"
+      adjacent_nodes.each_with_index { |each, i| puts "#{i}: #{each.name}" }
+    end
+  end
+
 end
 

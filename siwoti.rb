@@ -21,6 +21,6 @@ Game.players.each do |player|
   puts "[r]esearch information on a rumor?"
   puts "[s]earch for new rumors on the Internet?"
   puts "[d]isplay information about the currently known rumors?"
-  puts "[v]iew the map?"
+  puts "[v]iew the graph?"
 end
 
