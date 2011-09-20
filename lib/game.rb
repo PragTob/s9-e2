@@ -2,15 +2,14 @@ require_relative 'player'
 
 class Game
 
-  class << self
-    attr_reader :players
-    attr_reader :round
+  attr_reader :players, :round
+
+  def initialize
+    @players = []
+    @round = 1
   end
 
-  @players = []
-  @round = 1
-
-  def self.add_player(name)
+  def add_player(name)
     @players << Player.new(name)
   end
 
