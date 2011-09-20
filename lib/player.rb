@@ -22,6 +22,14 @@ class Player
   end
 
   def research
+    puts "How many hours do you want to spend researching?"
+    number = gets.chomp.to_i
+    if number > hours
+      puts "You don't have that much time left!"
+    else
+      @hours -= number
+      puts "You have got #{hours} hours left!"
+    end
   end
 
   def search_for_rumor

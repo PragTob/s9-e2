@@ -44,6 +44,8 @@ class Game
     case action
     when /v/
       view_graph
+    when /r/
+      current_player.research
     else
       puts "Command not recognized/implemented"
     end
@@ -68,6 +70,7 @@ class Game
   end
 
   def next_round
+    puts "------END OF ROUND #{round}------"
     @round += 1
     @current_player_number = 0
     @players.each { |player| player.new_turn }
