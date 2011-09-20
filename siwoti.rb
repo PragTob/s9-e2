@@ -1,3 +1,5 @@
+require_relative 'lib/player'
+
 # Someone is wrong on the Internet
 # This is the main file for console style gameplay
 
@@ -8,13 +10,13 @@ players = []
 
 number_of_players.times do |i|
   puts "Hey player #{i+1}! What's your name?"
-  players << gets.chomp
+  players << Player.new(gets.chomp)
 end
 
 round = 1
 puts "Welcome people!"
 players.each do |player|
-  puts player + " it's your turn! We are in round #{round}"
+  puts player.to_s + " it's your turn! We are in round #{round}"
   puts "What do you want to do?"
   puts "[c]reate content disproving a rumor?"
   puts "[r]esearch information on a rumor?"
