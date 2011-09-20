@@ -34,7 +34,7 @@ class Graph
 
     case action
     when /\d+/
-      graph.info_about_node(action.to_i)
+      info_about_node(action.to_i)
     else
       # get back to main loop
     end

@@ -31,10 +31,12 @@ class Node
       puts "Do you want any further information about a node?"
       puts "If so type its number, otherwise type anything else:"
       action = gets.chomp
+      puts action + "!"
+      puts action.to_i
 
       case action
       when /\d+/
-        adjacent_nodes[action.to_i -1].info
+        adjacent_nodes[action.to_i - 1].info
       else
         # return somehow
       end

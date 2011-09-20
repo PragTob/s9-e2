@@ -17,6 +17,10 @@ class Player
     @hours = HOURS_PER_TURN
   end
 
+  def no_hours_left?
+    hours <= 0
+  end
+
   def research
   end
 
