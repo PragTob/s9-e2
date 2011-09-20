@@ -23,5 +23,13 @@ game.players.each do |player|
   puts "[s]earch for new rumors on the Internet?"
   puts "[d]isplay information about the currently known rumors?"
   puts "[v]iew the graph?"
+  action = gets.chomp
+
+  case action
+  when /v/
+    game.view_graph
+  else
+    puts "Command not recognized/implemented"
+  end
 end
 
