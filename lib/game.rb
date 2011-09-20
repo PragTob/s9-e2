@@ -10,6 +10,7 @@ class Game
     @players = []
     @round = 0
     @graph = Graph.new
+    @current_player_number = 0
   end
 
   def add_player(name)
@@ -29,6 +30,7 @@ class Game
   def next_player
     if @current_player_number <= (@players.size -2)
       @current_player_number += 1
+      current_player
     else
       false
     end
@@ -39,17 +41,7 @@ class Game
   end
 
   def view_graph
-    graph.list_nodes
-    puts "Do you want more information about a specific node?"
-    puts "If so, type a number, otherwise type anything except for a number."
-    action = gets.chomp
-
-    case action
-    when /\d+/
-      graph.info_about_node(action.to_i)
-    else
-      # get back to main loop
-    end
+    graph.view
   end
 
 end
