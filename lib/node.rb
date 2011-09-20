@@ -21,7 +21,7 @@ class Node
   end
 
   def info
-    puts node.name
+    puts self.name
     if adjacent_nodes.empty?
       puts "No adjacent nodes!"
     else

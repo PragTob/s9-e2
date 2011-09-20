@@ -7,6 +7,7 @@ class Graph
 
   # for now statically initialized
   # TODO: Is there any way of making this set up stuff beautiful?
+  # SOLUTION? put it into a YAML file god damn it!
   def initialize
     @nodes = []
     @nodes << (video =  Node.new("Videoplatform"))
@@ -29,7 +30,7 @@ class Graph
   end
 
   def info_about_node(number)
-    @nodes[i-1].info
+    @nodes[number-1].info
   end
 
 end
