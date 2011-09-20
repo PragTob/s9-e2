@@ -10,7 +10,7 @@ class Node
 
   def initialize(name, adjacent_nodes)
     self.name = name
-    @adjacent_nodes = adjacent_nodes
+    adjacent_nodes.each { |nod| add_adjacent_node(node) }
     @rumors = {}
   end
 
