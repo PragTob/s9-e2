@@ -37,5 +37,12 @@ describe "Node" do
     other_node.adjacent_nodes.first.should eq @node
   end
 
+  it "may be created with multiple adjacent nodes given" do
+    mini_node = Node.new("I am small")
+
+    friendly_node = Node.new("I got lots of friends!", [@node, mini_node])
+    friendly_node.adjacent_nodes.should == [@node, mini_node]
+  end
+
 end
 
