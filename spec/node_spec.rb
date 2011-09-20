@@ -1,5 +1,7 @@
 require_relative '../lib/node'
 
+# TODO I am creating too many objects, may be I should use factory_girl
+
 def node_has_adjacent_node(node, adjacent_node)
   node.adjacent_nodes.empty?.should == false
   node.adjacent_nodes.first.should eq adjacent_node
@@ -46,9 +48,19 @@ describe "Node" do
     friendly_node.adjacent_nodes.should == [@node, mini_node]
   end
 
-#  it "adds itself as an adjacent to nodes given in the constructor" do
-#    other_node = Node.new("Hello", [@node])
+  it "adds itself as an adjacent to a node given in the constructor" do
+    other_node = Node.new("Hello", [@node])
 
+    node_has_adjacent_node(@node, other_node)
+  end
+
+  it "adds itself as an adjacent node to all nodes given in the constructore" do
+    mini_node = Node.new("mini")
+    other_node = Node.new("Other", [@node, mini_node])
+
+    node_has_adjacent_node(mini_node, other_node)
+    node_has_adjacent_node(@node, other_node)
+  end
 
 end
 
