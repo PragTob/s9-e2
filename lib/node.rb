@@ -27,6 +27,17 @@ class Node
     else
       puts "Adjacent nodes are:"
       adjacent_nodes.each_with_index { |each, i| puts "#{i}: #{each.name}" }
+      puts "Do you want any further information about a node?"
+      puts "If so type its number, otherwise type anything else:"
+      action = gets.chomp
+
+      case action
+      when /\d+/
+        adjacent_nodes[action.to_i].info
+      else
+        # return somehow
+      end
+
     end
   end
 
