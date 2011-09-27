@@ -19,28 +19,6 @@ module Siwoti
       node.adjacent_nodes << self
     end
 
-    def info
-      puts self.name
-      if adjacent_nodes.empty?
-        puts "No adjacent nodes!"
-      else
-        puts "Adjacent nodes are:"
-        adjacent_nodes.each_with_index { |each, i| puts "#{i+1}: #{each.name}" }
-
-        puts "Do you want any further information about a node?"
-        puts "If so type its number, otherwise type anything else:"
-        action = gets.chomp
-
-        case action
-        when /\d+/
-          adjacent_nodes[action.to_i - 1].info
-        else
-          # return somehow
-        end
-
-      end
-    end
-
   end
 end
 
