@@ -3,6 +3,7 @@ module Siwoti
     extend self
 
     RUMOR_PER_PLAYER_FACTOR = 3
+    NEW_RUMOR_CHANCE = 0.2
 
     attr_reader :players, :round, :graph
 
@@ -82,12 +83,19 @@ module Siwoti
     def seed_rumors
       @rumors = []
       (RUMOR_PER_PLAYER_FACTOR * players.size).times do
-        @rumors << Rumor.new("Rumor #{@rumors.size + 1}", graph.nodes.sample)
+        new_rumor
       end
+    end
+
+    def new_rumor
+      @rumors << Rumor.new("Rumor #{@rumors.size + 1}", graph.nodes.sample)
     end
 
     def increase_rumor_contamination
       @rumors.each { |rumor| rumor.increase_contamination }
+      if rand < (NEW_RUMOR_CHANCE * players.size)
+        new_rumor
+      end
     end
 
   end

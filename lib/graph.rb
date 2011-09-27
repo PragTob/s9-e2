@@ -47,8 +47,8 @@ module Siwoti
         "Like 1" => "Social 1",
         "Like 2" => "Social 3",
         "Microblogging" => ["Social 2", "Social 3"],
-        "Rumor 1" => ["Rumor 2", "Social 2", "Videoplatform"],
-        "Rumor 2" => ["Social 3", "Microblogging"],
+        "Rumorplatform 1" => ["Rumor 2", "Social 2", "Videoplatform"],
+        "Rumorplatform 2" => ["Social 3", "Microblogging"],
         "Blogging 1" => ["Microblogging", "Like 2", "Social 2"],
         "Blogging 2" => ["Social 3", "Social 1", "Like 1", "Videoplatform"])
     end
