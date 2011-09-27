@@ -1,4 +1,4 @@
-require_relative '../lib/rumor'
+require_relative 'spec_helper'
 
 ANTI_AGILE_RUMOR = <<-eos
                    Change is never going to happen! You can specify

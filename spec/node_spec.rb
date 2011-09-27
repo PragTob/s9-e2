@@ -1,4 +1,4 @@
-require_relative '../lib/node'
+require_relative 'spec_helper'
 
 # TODO I am creating too many objects, may be I should use factory_girl
 
