@@ -30,13 +30,13 @@ module Siwoti
 
     def get_or_create_node(node_name)
       if node_exists?(node_name)
-        node(node_name)
+        node_named(node_name)
       else
         Node.new(node_name)
       end
     end
 
-    def node(node_name)
+    def node_named(node_name)
       nodes.find { |node| node.name == node_name }
     end
 

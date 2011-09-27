@@ -19,7 +19,6 @@ module Siwoti
       main_loop
     end
 
-
     def add_player(name)
       @players << Player.new(name)
     end

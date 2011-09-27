@@ -11,7 +11,6 @@ module Siwoti
       @rumors = {}
     end
 
-
   end
 end
 
