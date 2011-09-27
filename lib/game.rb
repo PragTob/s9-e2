@@ -54,7 +54,8 @@ module Siwoti
       @round += 1
       @current_player_number = 0
       @players.each { |player| player.new_turn }
-      p @rumors
+      increase_rumor_contamination
+      @rumors.each { |rumor| View.display_rumor(rumor) }
     end
 
     def round_over?
@@ -83,6 +84,10 @@ module Siwoti
       (RUMOR_PER_PLAYER_FACTOR * players.size).times do
         @rumors << Rumor.new("Rumor #{@rumors.size + 1}", graph.nodes.sample)
       end
+    end
+
+    def increase_rumor_contamination
+      @rumors.each { |rumor| rumor.increase_contamination }
     end
 
   end

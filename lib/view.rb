@@ -55,7 +55,7 @@ module Siwoti
         when /\d+/
           display_node(adjacents[action.to_i - 1], graph)
         else
-          # return somehow
+          # back to the main loop
         end
       end
     end
@@ -70,6 +70,14 @@ module Siwoti
       puts "[d]isplay information about the currently known rumors?"
       puts "[v]iew the graph?"
       Game.execute_action(gets.chomp)
+    end
+
+    def display_rumor(rumor)
+      puts "Rumor: #{rumor.name}"
+      puts "Infected nodes:"
+      rumor.infected_nodes.each do |node|
+        puts node.name + " with #{node.rumors[rumor]}%"
+      end
     end
 
   end

@@ -6,9 +6,15 @@ module Siwoti
     # rumors is a hash pointing from a rumor to the % this node believes in it
     attr_reader :rumors
 
-    def initialize(name)
+    # we have the graph so we can check for our adjacent nodes
+    def initialize(name, graph)
       @name = name
+      @graph = graph
       @rumors = {}
+    end
+
+    def adjacent_nodes
+      @graph.adjacents[self]
     end
 
   end

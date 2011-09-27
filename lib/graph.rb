@@ -32,7 +32,7 @@ module Siwoti
       if node_exists?(node_name)
         node_named(node_name)
       else
-        Node.new(node_name)
+        Node.new(node_name, self)
       end
     end
 
