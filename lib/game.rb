@@ -2,6 +2,8 @@ module Siwoti
   module Game
     extend self
 
+    RUMOR_PER_PLAYER_FACTOR = 3
+
     attr_reader :players, :round, :graph
 
     def start
@@ -10,13 +12,14 @@ module Siwoti
       @graph = Graph.default_graph
       @current_player_number = 0
       View.greet_players
+      seed_rumors
+      main_loop
     end
 
     def introduce_players(number_of_players)
       number_of_players.times do |i|
         View.new_player(i + 1)
       end
-      main_loop
     end
 
     def add_player(name)
@@ -51,6 +54,7 @@ module Siwoti
       @round += 1
       @current_player_number = 0
       @players.each { |player| player.new_turn }
+      p @rumors
     end
 
     def round_over?
@@ -72,6 +76,13 @@ module Siwoti
 
     def view_graph
       View.graph(graph)
+    end
+
+    def seed_rumors
+      @rumors = []
+      (RUMOR_PER_PLAYER_FACTOR * players.size).times do
+        @rumors << Rumor.new("Rumor #{@rumors.size + 1}", graph.nodes.sample)
+      end
     end
 
   end
