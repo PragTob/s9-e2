@@ -28,30 +28,32 @@ module Siwoti
 
       case action
       when /\d+/
-        display_node(graph.nodes[action.to_i - 1])
+        display_node(graph.nodes[action.to_i - 1], graph)
       else
         # get back to main loop
       end
     end
 
-    def display_node(node)
+    def display_node(node, graph)
       puts node.name
-      if node.adjacent_nodes.empty?
+      if graph.adjacents[node].empty?
         puts "No adjacent nodes!"
       else
         puts "Adjacent nodes are:"
+        adjacents = graph.adjacents[node].to_a
 
-        node.adjacent_nodes.each_with_index do |each, i|
-          puts "#{i+1}: #{each.name}"
+        adjacents.each_with_index do |node, i|
+          puts "#{i+1}: #{node.name}"
         end
 
         puts "Do you want any further information about a node?"
         puts "If so type its number, otherwise type anything else:"
+
         action = gets.chomp
 
         case action
         when /\d+/
-          display_node(node.adjacent_nodes[action.to_i - 1])
+          display_node(adjacents[action.to_i - 1], graph)
         else
           # return somehow
         end

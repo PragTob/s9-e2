@@ -1,25 +1,56 @@
 module Siwoti
   class Graph
 
-    attr_reader :nodes
+    attr_reader :adjacents
 
-    # for now statically initialized
-    # TODO: Is there any way of making this set up stuff beautiful?
-    # SOLUTION? put it into a YAML file god damn it!
-    def initialize
-      @nodes = []
-      @nodes << (video =  Node.new("Videoplatform"))
-      @nodes << (social_1 = Node.new("Social 1", [video]))
-      @nodes << (social_2 = Node.new("Social 2", [social_1, video]))
-      @nodes << (social_3 = Node.new("Social 3", [video]))
-      @nodes << (like_1 = Node.new("Like 1", [social_1]))
-      @nodes << (like_2 = Node.new("Like 2", [social_3]))
-      @nodes << (microblogging = Node.new("Microblogging", [social_3]))
-      @nodes << (rumor_1 = Node.new("Rumor 1", [social_2, video]))
-      @nodes << (rumor_2 = Node.new("Rumor 1", [social_3, microblogging]))
-      @nodes << (blogging_1 = Node.new("Blogging 1", [microblogging, like_2,
-                                                      social_2]))
-      @nodes << (blogging_2 = Node.new("Blogging 2", [social_3, like_1, video]))
+    def initialize(connections)
+      @adjacents = Hash.new { |hash, key| hash[key] = Set.new }
+
+      connections.each do |node_name, neighbors|
+        node = get_or_create_node(node_name)
+        Array(neighbors).each do |neighbor_name|
+          neighbor = get_or_create_node(neighbor_name)
+          @adjacents[node].add(neighbor)
+          @adjacents[neighbor].add(node)
+        end
+      end
+    end
+
+    def next_to(node)
+      @adjacents[node].to_a
+    end
+
+    def nodes
+      @adjacents.keys
+    end
+
+    def node_exists?(node_name)
+      nodes.map(&:name).include?(node_name) unless nodes.empty?
+    end
+
+    def get_or_create_node(node_name)
+      if node_exists?(node_name)
+        node(node_name)
+      else
+        Node.new(node_name)
+      end
+    end
+
+    def node(node_name)
+      nodes.find { |node| node.name == node_name }
+    end
+
+    def self.default_graph
+      Graph.new(
+        "Videoplatform" => ["Social 1", "Social 2", "Social 3"],
+        "Social 2" => "Social 1",
+        "Like 1" => "Social 1",
+        "Like 2" => "Social 3",
+        "Microblogging" => ["Social 2", "Social 3"],
+        "Rumor 1" => ["Rumor 2", "Social 2", "Videoplatform"],
+        "Rumor 2" => ["Social 3", "Microblogging"],
+        "Blogging 1" => ["Microblogging", "Like 2", "Social 2"],
+        "Blogging 2" => ["Social 3", "Social 1", "Like 1", "Videoplatform"])
     end
 
   end

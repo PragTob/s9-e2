@@ -6,8 +6,8 @@ module Siwoti
 
     def start
       @players = []
-      @round = 0
-      @graph = Graph.new
+      @round = 1
+      @graph = Graph.default_graph
       @current_player_number = 0
       View.greet_players
     end

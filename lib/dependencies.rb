@@ -1,3 +1,4 @@
+require 'set'
 require_relative 'player'
 require_relative 'rumor'
 require_relative 'node'
