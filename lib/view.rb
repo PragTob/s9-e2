@@ -16,6 +16,7 @@ module Siwoti
 
     def next_round(round)
       puts "------END OF ROUND #{round}------"
+      puts "\n"
     end
 
     def display_graph(graph)
@@ -62,7 +63,7 @@ module Siwoti
 
     def choose_action(current_player, round)
       puts current_player.to_s + " it's your turn! We are in round #{round}"
-      puts "you have got #{current_player.hours} hours left"
+      puts "You have got #{current_player.hours} hours left"
       puts "What do you want to do?"
       puts "[c]reate content disproving a rumor?"
       puts "[r]esearch information on a rumor?"
@@ -78,6 +79,28 @@ module Siwoti
       rumor.infected_nodes.each do |node|
         puts node.name + " with #{node.rumors[rumor]}%"
       end
+      puts
+    end
+
+    def nothing_to_research
+      puts "You haven't discovered any rumors you could do research on yet!\n"
+    end
+
+    def select_rumor_to_research(rumors)
+      puts "Which rumor do you want to do research on?"
+
+      rumors.each_with_index { |rumor, i| puts "#{i + 1}. #{rumor.name}" }
+      puts "Press the according number."
+      index = gets.chomp.to_i
+
+      puts "How many hours do you want to spend research this rumor?"
+      hours = gets.chomp.to_i
+
+      Game.research_rumor(rumors[index - 1], hours)
+    end
+
+    def no_time_left
+      puts "You don't have that much time left this round!\n"
     end
 
   end

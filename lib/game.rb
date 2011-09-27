@@ -32,9 +32,28 @@ module Siwoti
       when /v/
         View.display_graph(graph)
       when /r/
-        current_player.research
+        research
+      # FIXME: development shortcut
+      when /e/
+        research_rumor(nil, 8)
       else
         puts "Command not recognized/implemented"
+      end
+    end
+
+    def research
+      if discovered_rumors.empty?
+        View.nothing_to_research
+      else
+        View.select_rumor_to_research(discovered_rumors)
+      end
+    end
+
+    def research_rumor(rumor, hours)
+      if hours > current_player.hours
+        View.no_time_left
+      else
+        current_player.research(rumor, hours)
       end
     end
 
@@ -96,6 +115,10 @@ module Siwoti
       if rand < (NEW_RUMOR_CHANCE * players.size)
         new_rumor
       end
+    end
+
+    def discovered_rumors
+      @rumors.find_all { |rumor| rumor.discovered == true }
     end
 
   end

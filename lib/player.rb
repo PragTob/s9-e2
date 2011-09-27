@@ -22,15 +22,9 @@ module Siwoti
       hours <= 0
     end
 
-    def research
-      puts "How many hours do you want to spend researching?"
-      number = gets.chomp.to_i
-      if number > hours
-        puts "You don't have that much time left!"
-      else
-        @hours -= number
-        puts "You have got #{hours} hours left!"
-      end
+    # TODO do research on the damn rumor
+    def research(rumor, hours)
+      @hours -= hours
     end
 
     def search_for_rumor
