@@ -8,14 +8,18 @@ ANTI_AGILE_RUMOR = <<-eos
 
 describe "Rumor" do
 
+  before :each do
+    @dummy_node = Node.new("dummy", nil)
+  end
+
   it "can be created with a name" do
-    rumor = Rumor.new "MyRumor"
+    rumor = Rumor.new("MyRumor", @dummy_node)
 
     rumor.name.should == "MyRumor"
   end
 
   it "may also have a description" do
-    rumor = Rumor.new "Agile sucks!", ANTI_AGILE_RUMOR
+    rumor = Rumor.new("Agile sucks!", @dummy_node, ANTI_AGILE_RUMOR)
 
     rumor.description.should == ANTI_AGILE_RUMOR
   end
