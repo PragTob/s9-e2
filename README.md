@@ -23,6 +23,10 @@ Challenge Exercise: Exponential Chaos
 - randomly generated map - it is static for now but rumors get spread randomly
 - events
 
+# How to run?
+
+A simple "rake" should do, what this does is executing "bin/siwoti"
+
 # Original game description: Someone is wrong on the Internet!
 
 http://xkcd.com/386/
