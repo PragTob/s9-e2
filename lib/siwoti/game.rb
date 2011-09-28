@@ -43,6 +43,8 @@ module Siwoti
       when /d/
         View.discovered_rumors(discovered_rumors)
       # FIXME: development shortcut
+      when /c/
+        View.create_content(discovered_rumors)
       when /e/
         research_rumor(nil, 8)
       else
@@ -85,6 +87,8 @@ module Siwoti
       @current_player_number = 0
       @players.each { |player| player.new_turn }
       increase_rumor_contamination
+
+      # TODO remove me
       @rumors.each { |rumor| View.display_rumor(rumor) }
     end
 

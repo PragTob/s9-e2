@@ -27,6 +27,8 @@ module Siwoti
       puts "\n------END OF ROUND #{round}------\n"
     end
 
+    # TODO display_nodes/display_graph/display_node
+    # I smell some big refactoring possibilities here
     def display_nodes(nodes)
       nodes.to_a.each_with_index { |each, i| puts "#{i+1}: #{each.name}" }
       newline
@@ -92,12 +94,12 @@ module Siwoti
 
       rumors.each_with_index { |rumor, i| puts "#{i + 1}. #{rumor.name}" }
       puts "Press the according number."
-      index = gets.chomp.to_i
+      rumor = rumors[gets.chomp.to_i - 1]
 
       puts "How many hours do you want to spend research this rumor?"
       hours = gets.chomp.to_i
 
-      Game.research_rumor(rumors[index - 1], hours)
+      Game.research_rumor(rumor, hours)
     end
 
     def research_increased(rumor, hours)
@@ -110,7 +112,8 @@ module Siwoti
     end
 
     def hours_left(current_player)
-      puts "You currently have #{current_player.hours} hours left."
+      puts "Hey #{current_player.name}, you currently have"
+        + "#{current_player.hours} hours left."
     end
 
     def hours_to_search(graph)
@@ -146,18 +149,31 @@ module Siwoti
         puts "Try searching for rumors.\n\n"
       else
         puts "You have already discovered the following rumors:"
-        rumors.each { |rumor| display_rumor(rumor) }
+        rumors.each_with_index { |rumor, i| display_rumor(rumor, i) }
       end
     end
 
-    def display_rumor(rumor)
-      puts "Rumor: #{rumor.name}"
-      puts "Your knowledge level of this rumor is: #{rumor.knowledge}"
-      puts "The infected nodes are:"
+    def display_rumor(rumor, i)
+      puts "#{i +1}. Rumor: #{rumor.name}"
+      puts "  Your knowledge level of this rumor is: #{rumor.knowledge}"
+      puts "  The infected nodes are:"
       rumor.infected_nodes.each do |node|
-        puts node.name + " with #{node.rumors[rumor]}%"
+        puts "  #{node.name}  with #{node.rumors[rumor]}%"
       end
       newline
+    end
+
+    def create_content(rumors)
+      puts "You know the following rumors:"
+      discovered_rumors
+
+      puts "Which rumor do you want to disprove? (Type the number)"
+      rumor = rumors[gets.chomp.to_i -1]
+
+      puts "How many hours do you want to spend on creating content " +
+        "disproving this rumor?"
+      hours = gets.chomp.to_i
+
     end
 
   end
