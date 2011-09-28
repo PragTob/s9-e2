@@ -2,6 +2,7 @@ module Siwoti
   class Player
 
     HOURS_PER_TURN = 8
+    RUMOR_SEARCH_FACTOR = 2
 
     attr_reader :name, :hours
 
@@ -23,11 +24,18 @@ module Siwoti
     end
 
     # TODO do research on the damn rumor
-    def research(rumor, hours)
+    def research(rumor, time)
       @hours -= hours
     end
 
-    def search_for_rumor
+    def search_for_rumors(node, time)
+      @hours -= time
+      search_value = (rand * RUMOR_SEARCH_FACTOR) / time
+
+      # now you get a chance to discover every rumor
+      node.rumors.each do |rumor, contamination|
+        rumor.discovered = true if search_value <= contamination
+      end
     end
 
   end

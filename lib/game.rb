@@ -28,11 +28,14 @@ module Siwoti
     end
 
     def execute_action(action)
+      View.hours_left(current_player)
       case action
       when /v/
         View.display_graph(graph)
       when /r/
         research
+      when /s/
+        View.hours_to_search(graph)
       # FIXME: development shortcut
       when /e/
         research_rumor(nil, 8)
@@ -119,6 +122,14 @@ module Siwoti
 
     def discovered_rumors
       @rumors.find_all { |rumor| rumor.discovered == true }
+    end
+
+    def search_for_rumors(node, hours)
+      if hours > current_player.hours
+        View.no_time_left
+      else
+        current_player.search_for_rumors(node, hours)
+      end
     end
 
   end

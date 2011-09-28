@@ -9,19 +9,27 @@ module Siwoti
       Game.introduce_players(gets.chomp.to_i)
     end
 
+    def newline
+      puts
+    end
+
     def new_player(number)
       puts "Hey player #{number}! What's your name?"
       Game.add_player(gets.chomp)
     end
 
     def next_round(round)
-      puts "------END OF ROUND #{round}------"
-      puts "\n"
+      puts "------END OF ROUND #{round}------\n"
+    end
+
+    def display_graph_nodes(graph)
+      puts "There are the following nodes:"
+      graph.nodes.each_with_index { |each, i| puts "#{i+1}: #{each.name}" }
+      newline
     end
 
     def display_graph(graph)
-      puts "There are the following nodes:"
-      graph.nodes.each_with_index { |each, i| puts "#{i+1}: #{each.name}" }
+      display_graph_nodes(graph)
 
       puts "Do you want more information about a specific node?"
       puts "If so, type a number, otherwise type anything except for a number."
@@ -47,6 +55,7 @@ module Siwoti
           puts "#{i+1}: #{node.name}"
         end
 
+        newline
         puts "Do you want any further information about a node?"
         puts "If so type its number, otherwise type anything else:"
 
@@ -63,7 +72,7 @@ module Siwoti
 
     def choose_action(current_player, round)
       puts current_player.to_s + " it's your turn! We are in round #{round}"
-      puts "You have got #{current_player.hours} hours left"
+      hours_left(current_player)
       puts "What do you want to do?"
       puts "[c]reate content disproving a rumor?"
       puts "[r]esearch information on a rumor?"
@@ -79,7 +88,7 @@ module Siwoti
       rumor.infected_nodes.each do |node|
         puts node.name + " with #{node.rumors[rumor]}%"
       end
-      puts
+      newline
     end
 
     def nothing_to_research
@@ -101,6 +110,25 @@ module Siwoti
 
     def no_time_left
       puts "You don't have that much time left this round!\n"
+    end
+
+    def hours_left(current_player)
+      newline
+      puts "You currently have #{current_player.hours} hours left."
+    end
+
+    def hours_to_search(graph)
+      puts "At which node do you want to search for a new rumors?"
+      display_graph_nodes(graph)
+
+      puts "Type the number of the node you want to search for new rumors."
+      node = graph.nodes[gets.chomp.to_i - 1]
+
+      puts "How many hours do you want to spend searching for new rumors?"
+      hours = gets.chomp.to_i
+      newline
+
+      Game.search_for_rumors(node, hours)
     end
 
   end
