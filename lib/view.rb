@@ -9,6 +9,11 @@ module Siwoti
       Game.introduce_players(gets.chomp.to_i)
     end
 
+    def welcome_player(name)
+      puts "Hello #{name}, nice to have you on board!"
+      puts "I hope you enjoy this game!"
+    end
+
     def newline
       puts
     end

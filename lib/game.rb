@@ -4,6 +4,8 @@ module Siwoti
 
     RUMOR_PER_PLAYER_FACTOR = 3
     NEW_RUMOR_CHANCE = 0.2
+    PERSONS = ["Yoda", "Chuck Testa", "John Doe", "Matz", "Ninja", "Bill",
+               "Bob Khan", "Vint Cerf", "angry cat", "Superman", "dude"]
 
     attr_reader :players, :round, :graph
 
@@ -24,7 +26,9 @@ module Siwoti
     end
 
     def add_player(name)
+      name = PERSONS.sample if name.empty?
       @players << Player.new(name)
+      View.welcome_player(name)
     end
 
     def execute_action(action)
