@@ -1,7 +1,23 @@
 Challenge Exercise: Exponential Chaos
 =====================================
 
-_written by: Shane Emmons_
+# State of the art
+
+## What works?
+
+- View the graph and inspect every node
+- Rumors get seeded in the beginning, they spread throughout the game and new rumors even appear
+- You can search for new rumors at specific nodes.
+
+## What needs to be done
+
+- Real research on a rumor
+- Create content disproving a rumor
+- formulated winning/losing conditions
+
+## What got cut so far/until now?
+
+- different characteristics of any kind (player, node rumor)
 
 # Someone is wrong on the Internet!
 
