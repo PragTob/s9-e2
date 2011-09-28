@@ -11,7 +11,7 @@ module Siwoti
 
     def welcome_player(name)
       puts "Hello #{name}, nice to have you on board!"
-      puts "I hope you enjoy this game!"
+      puts "I hope you enjoy this game!\n"
     end
 
     def newline
@@ -24,7 +24,7 @@ module Siwoti
     end
 
     def next_round(round)
-      puts "------END OF ROUND #{round}------\n"
+      puts "\n------END OF ROUND #{round}------\n"
     end
 
     def display_nodes(nodes)
@@ -83,15 +83,6 @@ module Siwoti
       Game.execute_action(gets.chomp)
     end
 
-    def display_rumor(rumor)
-      puts "Rumor: #{rumor.name}"
-      puts "Infected nodes:"
-      rumor.infected_nodes.each do |node|
-        puts node.name + " with #{node.rumors[rumor]}%"
-      end
-      newline
-    end
-
     def nothing_to_research
       puts "You haven't discovered any rumors you could do research on yet!\n"
     end
@@ -114,7 +105,6 @@ module Siwoti
     end
 
     def hours_left(current_player)
-      newline
       puts "You currently have #{current_player.hours} hours left."
     end
 
@@ -143,6 +133,25 @@ module Siwoti
 
     def no_rumors_found
       puts "Oh bad luck, you didn't discover any new rumors!"
+    end
+
+    def discovered_rumors(rumors)
+      if rumors.empty?
+        puts "Sorry you haven't discovered any rumor yet!"
+        puts "Try searching for rumors.\n\n"
+      else
+        puts "You have already discovered the following rumors:"
+        rumors.each { |rumor| display_rumor(rumor) }
+      end
+    end
+
+    def display_rumor(rumor)
+      puts "Rumor: #{rumor.name}"
+      puts "Infected nodes:"
+      rumor.infected_nodes.each do |node|
+        puts node.name + " with #{node.rumors[rumor]}%"
+      end
+      newline
     end
 
   end

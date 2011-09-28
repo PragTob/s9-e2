@@ -40,6 +40,8 @@ module Siwoti
         research
       when /s/
         View.hours_to_search(graph)
+      when /d/
+        View.discovered_rumors(discovered_rumors)
       # FIXME: development shortcut
       when /e/
         research_rumor(nil, 8)
