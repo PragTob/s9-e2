@@ -9,11 +9,13 @@ Challenge Exercise: Exponential Chaos
 - Rumors get seeded in the beginning, they spread randomly throughout the game and new rumors even appear
 - You can search for new rumors at specific nodes.
 - Real research on a rumor
+- Create content disproving a rumor
+- clear winning/losing conditions
+
 
 ## What needs to be done
 
-- Create content disproving a rumor
-- clear winning/losing conditions
+Wohoo I believe to be feature complete except for the stuff that I cut out!
 
 ## What got cut so far/until now?
 

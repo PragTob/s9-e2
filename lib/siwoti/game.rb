@@ -3,9 +3,11 @@ module Siwoti
     extend self
 
     RUMOR_PER_PLAYER_FACTOR = 3
-    NEW_RUMOR_CHANCE = 0.2
+    NEW_RUMOR_CHANCE = 0.25
     PERSONS = ["Yoda", "Chuck Testa", "John Doe", "Matz", "Ninja", "Bill",
                "Bob Khan", "Vint Cerf", "angry cat", "Superman", "dude"]
+    # Set to 1 for a really easy game
+    ELIMINATED_RUMORS_TO_WIN = 4
 
     attr_reader :players, :round, :graph
 
@@ -14,6 +16,7 @@ module Siwoti
       @round = 1
       @graph = Graph.default_graph
       @current_player_number = 0
+      @eliminated_rumors = 0
       View.greet_players
       seed_rumors
       main_loop
@@ -42,11 +45,11 @@ module Siwoti
         View.hours_to_search(graph)
       when /d/
         View.discovered_rumors(discovered_rumors)
-      # FIXME: development shortcut
       when /c/
         View.create_content(discovered_rumors)
+      # FIXME: development shortcut for cycling through the game fast
       when /e/
-        research_rumor(nil, 8)
+        current_player.hours -= 8
       else
         puts "Command not recognized/implemented"
       end
@@ -61,9 +64,7 @@ module Siwoti
     end
 
     def research_rumor(rumor, hours)
-      if hours > current_player.hours
-        View.no_time_left
-      else
+      if_player_has_time(hours) do
         current_player.research(rumor, hours)
         View.research_increased(rumor, hours)
       end
@@ -88,8 +89,8 @@ module Siwoti
       @players.each { |player| player.new_turn }
       increase_rumor_contamination
 
-      # TODO remove me
-      @rumors.each { |rumor| View.display_rumor(rumor) }
+      # CHEAT display every rumor so you don't have to search for them
+      #@rumors.each_with_index { |rumor,i| View.display_rumor(rumor,i) }
     end
 
     def round_over?
@@ -106,7 +107,12 @@ module Siwoti
 
     # no winning condition (yet) :P You all lose!
     def game_over?
-      false
+      if game_lost?
+        View.game_lost
+        true
+      else
+        false
+      end
     end
 
     def view_graph
@@ -135,10 +141,16 @@ module Siwoti
       @rumors.find_all { |rumor| rumor.discovered == true }
     end
 
-    def search_for_rumors(node, hours)
+    def if_player_has_time(hours, &blk)
       if hours > current_player.hours
         View.no_time_left
       else
+        blk.call
+      end
+    end
+
+    def search_for_rumors(node, hours)
+      if_player_has_time(hours) do
         old_rumors = discovered_rumors
         current_player.search_for_rumors(node, hours)
         new_rumors = discovered_rumors - old_rumors
@@ -149,6 +161,52 @@ module Siwoti
           View.new_rumors(new_rumors)
         end
       end
+    end
+
+    def create_content(rumor, node, hours)
+      if_player_has_time(hours) do
+        content_value = current_player.create_content(rumor, hours)
+
+        # initial adjustment showing that popular rumors are harder to disprove
+        content_value -= node.rumors[rumor]
+        if content_value > 0
+          rumor.decrease_contamination(content_value, node)
+          if rumor.extinct?
+            @rumors.delete(rumor)
+            @eliminated_rumors += 1
+            if game_won?
+              View.game_won
+              exit
+            else
+              View.eliminated_rumor(@eliminated_rumors)
+            end
+          end
+          View.succesful_content_creation
+        else
+          View.failed_content_creation
+        end
+      end
+    end
+
+    # the game is lost when a rumor reached a contamination of over 80%
+    # in every node of the graph
+    def game_lost?
+      @rumors.each do |rumor|
+        next if rumor.infected_nodes.size < graph.nodes.size
+        lost = true
+        rumor.infected_nodes.each do |node|
+          if node.rumors[rumor] <= 80
+            lost = false
+            break
+          end
+        end
+        return true if lost
+      end
+      false
+    end
+
+    def game_won?
+      @eliminated_rumors >= ELIMINATED_RUMORS_TO_WIN
     end
 
   end

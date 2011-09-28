@@ -5,6 +5,8 @@ module Siwoti
     VARYING_CONTAMINATION = 20
     CONTAMINATION_PER_ROUND = 10
     CONTAMINATION_TO_SPREAD = 20
+    SPREAD_REDUCE_VALUE = 4
+    TOO_SMALL_CONTENT_VALUE = 2
 
     attr_reader :name, :infected_nodes
     attr_accessor :discovered, :knowledge
@@ -25,11 +27,34 @@ module Siwoti
     def increase_contamination
       @infected_nodes.each do |node|
         node.rumors[self] += rand(CONTAMINATION_PER_ROUND)
+        node.rumors[self] = 100 if node.rumors[self] > 100
         spreading_value = rand(node.rumors[self])
         if spreading_value > CONTAMINATION_TO_SPREAD
           spread_from(node, spreading_value)
         end
       end
+    end
+
+    def decrease_contamination(value, node)
+      if value >= node.rumors[self]
+        node.rumors.delete(self)
+        @infected_nodes.delete(node)
+      else
+        node.rumors[self] -= value
+      end
+
+      # decrease the contamination in adjacent nodes (to a lesser degree)
+      # yes this will again reduce the value in the original node
+      value /= SPREAD_REDUCE_VALUE
+      if value >= CONTAMINATION_TO_SPREAD
+        node.adjacent_nodes.each do |node|
+          decrease_contamination(value, node) if node.rumors[self]
+        end
+      end
+    end
+
+    def extinct?
+      @infected_nodes.empty?
     end
 
     private

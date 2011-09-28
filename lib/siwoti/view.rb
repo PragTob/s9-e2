@@ -20,6 +20,8 @@ module Siwoti
 
     def new_player(number)
       puts "Hey player #{number}! What's your name?"
+      puts "(Just hit Enter and I'll give you a name - whether you like it.)" +
+        " or not."
       Game.add_player(gets.chomp)
     end
 
@@ -44,19 +46,20 @@ module Siwoti
 
       case action
       when /\d+/
-        display_node(graph.nodes[action.to_i - 1], graph)
+        display_node(graph.nodes[action.to_i - 1])
       else
         # get back to main loop
       end
     end
 
-    def display_node(node, graph)
+    def display_node(node)
       puts node.name
-      if graph.adjacents[node].empty?
+      adjacent_nodes = node.adjacent_nodes.to_a
+      if adjacent_nodes.empty?
         puts "No adjacent nodes!"
       else
         puts "Adjacent nodes are:"
-        display_nodes(graph.adjacents[node])
+        display_nodes(adjacent_nodes)
 
         newline
         puts "Do you want any further information about a node?"
@@ -66,7 +69,7 @@ module Siwoti
 
         case action
         when /\d+/
-          display_node(adjacents[action.to_i - 1], graph)
+          display_node(adjacent_nodes[action.to_i - 1])
         else
           # back to the main loop
         end
@@ -112,8 +115,8 @@ module Siwoti
     end
 
     def hours_left(current_player)
-      puts "Hey #{current_player.name}, you currently have"
-        + "#{current_player.hours} hours left."
+      puts "Hey #{current_player.name}, you currently have " +
+        "#{current_player.hours} hours left."
     end
 
     def hours_to_search(graph)
@@ -164,16 +167,61 @@ module Siwoti
     end
 
     def create_content(rumors)
-      puts "You know the following rumors:"
-      discovered_rumors
+      if rumors.empty?
+        puts "You don't know any rumors yet, try to search for them."
+      else
+        puts "You know the following rumors:"
+        discovered_rumors(rumors)
 
-      puts "Which rumor do you want to disprove? (Type the number)"
-      rumor = rumors[gets.chomp.to_i -1]
+        puts "Which rumor do you want to disprove? (Type the number)"
+        rumor = rumors[gets.chomp.to_i - 1]
 
-      puts "How many hours do you want to spend on creating content " +
-        "disproving this rumor?"
-      hours = gets.chomp.to_i
+        puts "Please choose the node you want to post the content to."
+        puts "Note that this also partially disproves rumors in adjacent nodes."
+        newline
+        display_nodes(rumor.infected_nodes)
+        puts "Choose the node by typing in its number."
+        node = rumor.infected_nodes[gets.chomp.to_i - 1]
 
+        puts "How many hours do you want to spend on creating content " +
+          "disproving this rumor?"
+        hours = gets.chomp.to_i
+
+        Game.create_content(rumor, node, hours)
+      end
+    end
+
+    def succesful_content_creation
+      puts "You succesfully created content."
+      puts "Check out your known information about rumors if you want to know" +
+        " what the effect was."
+      newline
+    end
+
+    def failed_content_creation
+      puts "The content you produced wasn't of a high enough quality."
+      puts "The people didn't really even take notice and continued to " +
+        "believe in the rumor."
+      newline
+    end
+
+    def game_won
+      puts "Congratulations, you have won an epic game of someone is wrong on" +
+        " the Internet!"
+      puts "You're awesome!"
+    end
+
+    def game_lost
+      puts "You could not right all wrongs and now everybody believes in a " +
+        "stupid rumor..."
+      puts "Try harder next time!"
+    end
+
+    def eliminated_rumor(count)
+      puts "You succesfully eliminated a rumor! Congrats!"
+      puts "You have now eliminated #{count} rumors."
+      puts "You need to eliminate #{Game::ELIMINATED_RUMORS_TO_WIN} rumors " +
+        "in order to win the game."
     end
 
   end
