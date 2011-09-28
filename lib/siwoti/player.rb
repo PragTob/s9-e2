@@ -3,6 +3,8 @@ module Siwoti
 
     HOURS_PER_TURN = 8
     RUMOR_SEARCH_FACTOR = 4
+    RESEARCH_PER_HOUR_BASE = 3
+    RESEARCH_PER_HOUR = 5
 
     attr_reader :name, :hours
 
@@ -23,9 +25,10 @@ module Siwoti
       hours <= 0
     end
 
-    # TODO do research on the damn rumor
     def research(rumor, time)
-      @hours -= hours
+      @hours -= time
+      knowledge = (RESEARCH_PER_HOUR_BASE + rand(RESEARCH_PER_HOUR))  * time
+      rumor.knowledge += knowledge
     end
 
     def search_for_rumors(node, time)

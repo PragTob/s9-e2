@@ -63,6 +63,7 @@ module Siwoti
         View.no_time_left
       else
         current_player.research(rumor, hours)
+        View.research_increased(rumor, hours)
       end
     end
 

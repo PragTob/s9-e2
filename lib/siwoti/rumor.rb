@@ -7,13 +7,16 @@ module Siwoti
     CONTAMINATION_TO_SPREAD = 20
 
     attr_reader :name, :infected_nodes
-    attr_accessor :discovered
+    attr_accessor :discovered, :knowledge
 
     def initialize(name, node)
       @name = name
       @infected_nodes = []
       node.rumors[self] = BASE_CONTAMINATION + rand(VARYING_CONTAMINATION)
       @infected_nodes << node
+
+      # the knowledge the group gathered about this rumor
+      @knowledge = 0
 
       # rumors start out undiscovered
       @discovered = false

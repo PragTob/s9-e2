@@ -100,6 +100,11 @@ module Siwoti
       Game.research_rumor(rumors[index - 1], hours)
     end
 
+    def research_increased(rumor, hours)
+      puts "You spend #{hours} hours researching rumor #{rumor.name}"
+      puts "Your knowledge of this rumor increased to #{rumor.knowledge}\n\n"
+    end
+
     def no_time_left
       puts "You don't have that much time left this round!\n"
     end
@@ -147,7 +152,8 @@ module Siwoti
 
     def display_rumor(rumor)
       puts "Rumor: #{rumor.name}"
-      puts "Infected nodes:"
+      puts "Your knowledge level of this rumor is: #{rumor.knowledge}"
+      puts "The infected nodes are:"
       rumor.infected_nodes.each do |node|
         puts node.name + " with #{node.rumors[rumor]}%"
       end
