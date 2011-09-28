@@ -6,7 +6,7 @@ Challenge Exercise: Exponential Chaos
 ## What works?
 
 - View the graph and inspect every node
-- Rumors get seeded in the beginning, they spread throughout the game and new rumors even appear
+- Rumors get seeded in the beginning, they spread randomly throughout the game and new rumors even appear
 - You can search for new rumors at specific nodes.
 
 ## What needs to be done
@@ -17,9 +17,13 @@ Challenge Exercise: Exponential Chaos
 
 ## What got cut so far/until now?
 
-- different characteristics of any kind (player, node rumor)
+- different characteristics of any kind (player, node, rumor, content for disproving rumor)
+  - as part of that real rumor/node names...
+- money as a resource
+- randomly generated map - it is static for now but rumors get spread randomly
+- events
 
-# Someone is wrong on the Internet!
+# Original game description: Someone is wrong on the Internet!
 
 http://xkcd.com/386/
 
@@ -87,13 +91,6 @@ Concerning the problem of how to connect the nodes, Pete had some very interesti
 > * Similar to the idea above, but replace the granular percentage system instead with a set number of traits, where each node has a certain number, and those affect the memes that a node can be infected with. Maybe a node can gain more traits (simulating popularity?) as the game goes on. So, for example, reddit starts the game with the programming trait, and gains "obsession with cats" and "Ron Paul support" as the game advances. Maybe as a meme gets more popular, it gains traits as well. I'm not sure this would make sense in all cases.
 >
 > * To combat the problem of things not making sense, you could use totally fictional nodes modeled after real ones perhaps. Then things would fall into categories like news site, forum, social news, etc. The nodes would be connected by perhaps a forum having a lot of respect for a certain news site, or something like that.
-
-### Citymap
-The map consists of certain places of interest: the home of the characters, the library, the university etc.
-
-You gotta move between these spots in order to fulfil your tasks. So you can search for new rumors at home and gather research in the library or the university. You could also meet up at a place with your friends to exchange your results. Also some characters have to go to work.
-
-Problem: The danger (the rumors) would not present on this map. Rumors would just be a percentage saying how many % of the world population belief in this rumor. However this would greatly simplify the game concept.
 
 ## Events
 
