@@ -128,7 +128,10 @@ module Siwoti
       if hours > current_player.hours
         View.no_time_left
       else
+        old_rumors = discovered_rumors
         current_player.search_for_rumors(node, hours)
+        new_rumors = discovered_rumors - old_rumors
+        View.new_rumors(new_rumors) unless new_rumors.empty?
       end
     end
 

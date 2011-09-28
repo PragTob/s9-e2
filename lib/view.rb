@@ -22,14 +22,14 @@ module Siwoti
       puts "------END OF ROUND #{round}------\n"
     end
 
-    def display_graph_nodes(graph)
-      puts "There are the following nodes:"
-      graph.nodes.each_with_index { |each, i| puts "#{i+1}: #{each.name}" }
+    def display_nodes(nodes)
+      nodes.to_a.each_with_index { |each, i| puts "#{i+1}: #{each.name}" }
       newline
     end
 
     def display_graph(graph)
-      display_graph_nodes(graph)
+      puts "There are the following nodes:"
+      display_nodes(graph.nodes)
 
       puts "Do you want more information about a specific node?"
       puts "If so, type a number, otherwise type anything except for a number."
@@ -49,11 +49,7 @@ module Siwoti
         puts "No adjacent nodes!"
       else
         puts "Adjacent nodes are:"
-        adjacents = graph.adjacents[node].to_a
-
-        adjacents.each_with_index do |node, i|
-          puts "#{i+1}: #{node.name}"
-        end
+        display_nodes(graph.adjacents[node])
 
         newline
         puts "Do you want any further information about a node?"
@@ -119,7 +115,7 @@ module Siwoti
 
     def hours_to_search(graph)
       puts "At which node do you want to search for a new rumors?"
-      display_graph_nodes(graph)
+      display_nodes(graph.nodes)
 
       puts "Type the number of the node you want to search for new rumors."
       node = graph.nodes[gets.chomp.to_i - 1]
@@ -129,6 +125,15 @@ module Siwoti
       newline
 
       Game.search_for_rumors(node, hours)
+    end
+
+    def new_rumors(rumors)
+      puts "Congratulation you have discovered new rumors!"
+      rumors.each do |rumor|
+        puts "You have discovered the rumor #{rumor.name}"
+        puts "The infected nodes are:"
+        display_nodes(rumor.infected_nodes)
+      end
     end
 
   end
