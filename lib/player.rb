@@ -19,7 +19,7 @@ module Siwoti
       @hours = HOURS_PER_TURN
     end
 
-    def no_hours_left?
+    def out_of_time?
       hours <= 0
     end
 

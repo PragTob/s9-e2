@@ -136,6 +136,10 @@ module Siwoti
       end
     end
 
+    def no_rumors_found
+      puts "Oh bad luck, you didn't discover any new rumors!"
+    end
+
   end
 end
 

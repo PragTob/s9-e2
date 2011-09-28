@@ -63,7 +63,7 @@ module Siwoti
     def main_loop
       until game_over?
         until round_over?
-          until current_player.no_hours_left?
+          until current_player.out_of_time?
             View.choose_action(current_player, round)
           end
           next_player
@@ -131,7 +131,12 @@ module Siwoti
         old_rumors = discovered_rumors
         current_player.search_for_rumors(node, hours)
         new_rumors = discovered_rumors - old_rumors
-        View.new_rumors(new_rumors) unless new_rumors.empty?
+
+        if new_rumors.empty?
+          View.no_rumors_found
+        else
+          View.new_rumors(new_rumors)
+        end
       end
     end
 
