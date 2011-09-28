@@ -6,12 +6,11 @@ module Siwoti
     CONTAMINATION_PER_ROUND = 10
     CONTAMINATION_TO_SPREAD = 20
 
-    attr_reader :name, :description, :infected_nodes
+    attr_reader :name, :infected_nodes
     attr_accessor :discovered
 
-    def initialize(name, node, description=nil)
+    def initialize(name, node)
       @name = name
-      @description = description
       @infected_nodes = []
       node.rumors[self] = BASE_CONTAMINATION + rand(VARYING_CONTAMINATION)
       @infected_nodes << node

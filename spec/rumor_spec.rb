@@ -18,11 +18,5 @@ describe "Rumor" do
     rumor.name.should == "MyRumor"
   end
 
-  it "may also have a description" do
-    rumor = Rumor.new("Agile sucks!", @dummy_node, ANTI_AGILE_RUMOR)
-
-    rumor.description.should == ANTI_AGILE_RUMOR
-  end
-
 end
 
