@@ -1,4 +1,6 @@
-require_relative 'lib/dependencies'
+#!/usr/bin/env ruby
+
+require_relative '../lib/dependencies'
 
 # Someone is wrong on the Internet
 # This is the main file for console style gameplay
