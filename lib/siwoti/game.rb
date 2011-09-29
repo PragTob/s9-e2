@@ -7,10 +7,10 @@ module Siwoti
     PERSONS = ["Yoda", "Chuck Testa", "John Doe", "Matz", "Ninja", "Bill",
                "Bob Khan", "Vint Cerf", "angry cat", "Superman", "dude"]
     # Set to 1 for a really easy game
-    ELIMINATED_RUMORS_TO_WIN = 4
+    DEFAULT_ELIMINATED_RUMORS_TO_WIN = 4
     LOOSE_PERCENT = 80
 
-    attr_reader :players, :round, :graph
+    attr_reader :players, :round, :graph, :eliminated_rumors_to_win
 
     def start
       @players = []
@@ -19,6 +19,7 @@ module Siwoti
       @current_player_number = 0
       @eliminated_rumors = 0
       View.greet_players
+      View.difficulty
       seed_rumors
       main_loop
     end
@@ -33,6 +34,15 @@ module Siwoti
       name = PERSONS.sample if name.empty?
       @players << Player.new(name)
       View.welcome_player(name)
+    end
+
+    def difficulty(action)
+      case action
+      when /e/
+        @eliminated_rumors_to_win = 1
+      else
+        @eliminated_rumors_to_win = DEFAULT_ELIMINATED_RUMORS_TO_WIN
+      end
     end
 
     def execute_action(action)
@@ -50,7 +60,7 @@ module Siwoti
         View.create_content(discovered_rumors)
       # TODO: development shortcut for cycling through the game fast
       when /e/
-        current_player.hours -= 8
+        current_player.hours = 0
       else
         View.command_not_recognized(action)
       end
@@ -118,19 +128,27 @@ module Siwoti
 
     def seed_rumors
       @rumors = []
-      (RUMOR_PER_PLAYER_FACTOR * players.size).times do
-        new_rumor
+      initial_rumor
+      ((RUMOR_PER_PLAYER_FACTOR * players.size)).times do
+        new_random_rumor
       end
     end
 
-    def new_rumor
+    def initial_rumor
+      rumor = Rumor.new("Waterfall development rocks!", graph.nodes.sample)
+      rumor.discovered = true
+      @rumors << rumor
+      View.initial_rumor(rumor)
+    end
+
+    def new_random_rumor
       @rumors << Rumor.new("Rumor #{@rumors.size + 1}", graph.nodes.sample)
     end
 
     def increase_rumor_contamination
       @rumors.each { |rumor| rumor.increase_contamination }
       if rand < (NEW_RUMOR_CHANCE * players.size)
-        new_rumor
+        new_random_rumor
         View.new_rumor
       end
     end
@@ -196,7 +214,7 @@ module Siwoti
     end
 
     def game_won?
-      @eliminated_rumors >= ELIMINATED_RUMORS_TO_WIN
+      @eliminated_rumors >= @eliminated_rumors_to_win
     end
 
   end

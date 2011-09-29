@@ -26,6 +26,30 @@ module Siwoti
       Game.add_player(gets.chomp)
     end
 
+    def difficulty
+      puts "How difficult shall this game be?"
+      puts "[e]asy - disprove one rumor to win the game."
+      puts "everything else results in the default value" +
+        "(#{Game::DEFAULT_ELIMINATED_RUMORS_TO_WIN})"
+      Game.difficulty(gets.chomp)
+    end
+
+    def initial_rumor(rumor)
+      puts "Today you were surfing on the internet... nothing special."
+      puts "But then you stumble upon something..."
+      puts "A rumor claiming #{rumor.name}!"
+      puts "This is outrageous!!!"
+      puts "You embark on a journey to disprove this rumor and all other " +
+        "rumors you come across!"
+      puts "You have discovered this rumor, but be aware there are many " +
+        "undiscovered rumors out there."
+      puts "Disprove #{Game.eliminated_rumors_to_win} in order to win."
+      puts "But if more than #{Game::LOOSE_PERCENT}% of the people on all " +
+        "nodes believe in a rumor, you lose!"
+      puts "Good luck - you will need it!"
+      newline
+    end
+
     def next_round(round)
       puts "\n------END OF ROUND #{round}------"
       newline
@@ -81,6 +105,7 @@ module Siwoti
       puts "[s]earch for new rumors on the Internet?"
       puts "[d]isplay information about the currently known rumors?"
       puts "[v]iew the graph?"
+      puts "[e]nd this turn now? (in order to lose fast)"
       Game.execute_action(gets.chomp)
     end
 
@@ -239,6 +264,7 @@ module Siwoti
     def new_rumor
       puts "There is an uproar on the Internet..."
       puts "It seems like a new rumor just has spread,"
+      newline
     end
 
     def command_not_recognized(command)
