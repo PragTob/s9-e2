@@ -147,7 +147,7 @@ module Siwoti
       puts "Hint: you will also search in its adjacent nodes"
       display_nodes(graph.nodes)
 
-      puts "Especially at the beginning of the game rumors are hard to dsicover"
+      puts "Especially at the beginning of the game rumors are hard to discover"
       puts "Type the number of the node you want to search for new rumors."
       node = get_element_from(graph.nodes)
 
@@ -257,8 +257,8 @@ module Siwoti
     def eliminated_rumor(count)
       puts "You succesfully eliminated a rumor! Congrats!"
       puts "You have now eliminated #{count} rumors."
-      puts "You need to eliminate #{Game::ELIMINATED_RUMORS_TO_WIN} rumors " +
-        "in order to win the game."
+      puts "You need to eliminate #{Game::DEFAULT_ELIMINATED_RUMORS_TO_WIN} " +
+        "rumors in order to win the game."
     end
 
     def new_rumor
@@ -272,6 +272,10 @@ module Siwoti
       puts "The command was #{command}."
       puts "Please try again."
       newline
+    end
+
+    def no_negative_time
+      puts "Hey you can't do something in negative or no time."
     end
 
   end

@@ -160,6 +160,8 @@ module Siwoti
     def if_player_has_time(hours, &blk)
       if hours > current_player.hours
         View.no_time_left
+      elsif hours <= 0
+        View.no_negative_time
       else
         blk.call
       end
