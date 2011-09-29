@@ -5,6 +5,7 @@ module Siwoti
     RUMOR_SEARCH_FACTOR = 3 # higher makes it more difficult
     RESEARCH_PER_HOUR_BASE = 3
     RESEARCH_PER_HOUR = 5
+    CONTENT_PER_HOUR_MODIFIER = 0.5
 
     attr_reader :name
     attr_accessor :hours
@@ -49,7 +50,7 @@ module Siwoti
 
     def create_content(rumor, hours)
       @hours -= hours
-      rumor.knowledge * hours
+      rumor.knowledge * hours * CONTENT_PER_HOUR_MODIFIER
     end
 
   end
