@@ -36,7 +36,14 @@ module Siwoti
     def search_for_rumors(node, time)
       @hours -= time
       search_value = (rand(100) * RUMOR_SEARCH_FACTOR) / time
-      discover_rumors(node, search_value)
+      discovered_rumors = []
+
+      # search this node and neighboring nodes
+      nodes_to_search = Set.new(node.adjacent_nodes).add(node)
+      nodes_to_search.each do |node|
+        discovered_rumors += discover_rumors(node, search_value)
+      end
+      discovered_rumors
     end
 
     def discover_rumors(node, search_value)

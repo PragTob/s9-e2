@@ -121,10 +121,12 @@ module Siwoti
         "#{current_player.hours} hours left."
     end
 
-    def hours_to_search(graph)
+    def search(graph)
       puts "At which node do you want to search for a new rumors?"
+      puts "Hint: you will also search in its adjacent nodes"
       display_nodes(graph.nodes)
 
+      puts "Especially at the beginning of the game rumors are hard to dsicover"
       puts "Type the number of the node you want to search for new rumors."
       node = graph.nodes[get_index_number]
 

@@ -43,7 +43,7 @@ module Siwoti
       when /r/
         research
       when /s/
-        View.hours_to_search(graph)
+        View.search(graph)
       when /d/
         View.discovered_rumors(discovered_rumors)
       when /c/
