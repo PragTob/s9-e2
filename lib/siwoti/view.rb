@@ -39,17 +39,7 @@ module Siwoti
     def display_graph(graph)
       puts "There are the following nodes:"
       display_nodes(graph.nodes)
-
-      puts "Do you want more information about a specific node?"
-      puts "If so, type a number, otherwise type anything except for a number."
-      action = gets.chomp
-
-      case action
-      when /\d+/
-        display_node(graph.nodes[action.to_i - 1])
-      else
-        # get back to main loop
-      end
+      explore_nodes(graph.nodes)
     end
 
     def display_node(node)
@@ -60,19 +50,25 @@ module Siwoti
       else
         puts "Adjacent nodes are:"
         display_nodes(adjacent_nodes)
+        explore_nodes(adjacent_nodes)
+      end
+    end
 
-        newline
-        puts "Do you want any further information about a node?"
-        puts "If so type its number, otherwise type anything else:"
+    def explore_nodes(nodes)
+      puts "Do you want more information about a specific node?"
+      puts "If so, type a number, otherwise type anything except for a number."
+      action = gets.chomp
 
-        action = gets.chomp
-
-        case action
-        when /\d+/
-          display_node(adjacent_nodes[action.to_i - 1])
+      case action
+      when /\d+/
+        number = action.to_i
+        if (1..nodes.size).include?(number)
+          display_node(nodes[number - 1])
         else
-          # back to the main loop
+          display_node(get_element_from(nodes))
         end
+      else
+        # get back to main loop
       end
     end
 
@@ -97,7 +93,7 @@ module Siwoti
 
       rumors.each_with_index { |rumor, i| puts "#{i + 1}. #{rumor.name}" }
       puts "Press the according number."
-      rumor = rumors[get_index_number]
+      rumor = get_element_from(rumors)
 
       puts "How many hours do you want to spend research this rumor?"
       hours = gets.chomp.to_i
@@ -128,7 +124,7 @@ module Siwoti
 
       puts "Especially at the beginning of the game rumors are hard to dsicover"
       puts "Type the number of the node you want to search for new rumors."
-      node = graph.nodes[get_index_number]
+      node = get_element_from(graph.nodes)
 
       puts "How many hours do you want to spend searching for new rumors?"
       hours = gets.chomp.to_i
@@ -181,14 +177,14 @@ module Siwoti
         discovered_rumors(rumors)
 
         puts "Which rumor do you want to disprove? (Type the number)"
-        rumor = rumors[get_index_number]
+        rumor = get_element_from(rumors)
 
         puts "Please choose the node you want to post the content to."
         puts "Note that this also partially disproves rumors in adjacent nodes."
         newline
         display_nodes(rumor.infected_nodes)
         puts "Choose the node by typing in its number."
-        node = rumor.infected_nodes[get_index_number]
+        node = get_element_from(rumor.infected_nodes)
 
         puts "How many hours do you want to spend on creating content " +
           "disproving this rumor?"
@@ -198,9 +194,13 @@ module Siwoti
       end
     end
 
-    # adjust the number to conform with array indices
-    def get_index_number
-      gets.chomp.to_i - 1
+    def get_element_from(elements)
+      range = 1..elements.size
+      begin
+        puts "Put in a number in the range #{range}"
+        number = gets.chomp.to_i
+      end until range.include?(number)
+      elements[number - 1]
     end
 
     def succesful_content_creation
