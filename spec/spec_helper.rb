@@ -1,3 +1,3 @@
-require_relative '../lib/dependencies'
+require_relative '../lib/siwoti'
 include Siwoti
 

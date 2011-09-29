@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/dependencies'
+require_relative '../lib/siwoti'
 
 # Someone is wrong on the Internet
 # This is the main file for console style gameplay
