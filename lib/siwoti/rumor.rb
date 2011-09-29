@@ -1,12 +1,13 @@
 module Siwoti
   class Rumor
 
-    BASE_CONTAMINATION = 5
+    BASE_CONTAMINATION = 10
     VARYING_CONTAMINATION = 20
     CONTAMINATION_PER_ROUND = 10
     CONTAMINATION_TO_SPREAD = 20
-    SPREAD_REDUCE_VALUE = 4
-    TOO_SMALL_CONTENT_VALUE = 2
+    DECREASE_SPREAD_REDUCE_FACTOR = 0.25
+    DECREASE_TO_SPREAD = 20
+    TOO_SMALL_DECREASE_VALUE = 2
 
     attr_reader :name, :infected_nodes
     attr_accessor :discovered, :knowledge
@@ -14,14 +15,16 @@ module Siwoti
     def initialize(name, node)
       @name = name
       @infected_nodes = []
-      node.rumors[self] = BASE_CONTAMINATION + rand(VARYING_CONTAMINATION)
+      initially_contaminate(node)
       @infected_nodes << node
-
       # the knowledge the group gathered about this rumor
       @knowledge = 0
-
       # rumors start out undiscovered
       @discovered = false
+    end
+
+    def initially_contaminate(node)
+      node.rumors[self] = BASE_CONTAMINATION + rand(VARYING_CONTAMINATION)
     end
 
     def increase_contamination
@@ -43,14 +46,7 @@ module Siwoti
         node.rumors[self] -= value
       end
 
-      # decrease the contamination in adjacent nodes (to a lesser degree)
-      # yes this will again reduce the value in the original node
-      value /= SPREAD_REDUCE_VALUE
-      if value >= CONTAMINATION_TO_SPREAD
-        node.adjacent_nodes.each do |node|
-          decrease_contamination(value, node) if node.rumors[self]
-        end
-      end
+      spread_contamination_decrease(value, node)
     end
 
     def extinct?
@@ -79,6 +75,17 @@ module Siwoti
         node_to_infect = uninfected.sample
         node_to_infect.rumors[self] = spreading_value
         @infected_nodes << node_to_infect
+      end
+    end
+
+    # decrease the contamination in adjacent nodes (to a lesser degree)
+    def spread_contamination_decrease(value, node)
+      # yes this will again reduce the value in the original node
+      value *= DECREASE_SPREAD_REDUCE_FACTOR
+      if value >= DECREASE_TO_SPREAD
+        node.adjacent_nodes.each do |node|
+          decrease_contamination(value, node) if node.rumors[self]
+        end
       end
     end
 
