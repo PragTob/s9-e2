@@ -3,11 +3,12 @@ module Siwoti
     extend self
 
     RUMOR_PER_PLAYER_FACTOR = 3
-    NEW_RUMOR_CHANCE = 0.25
+    NEW_RUMOR_CHANCE = 0.2
     PERSONS = ["Yoda", "Chuck Testa", "John Doe", "Matz", "Ninja", "Bill",
                "Bob Khan", "Vint Cerf", "angry cat", "Superman", "dude"]
     # Set to 1 for a really easy game
     ELIMINATED_RUMORS_TO_WIN = 4
+    LOOSE_PERCENT = 80
 
     attr_reader :players, :round, :graph
 
@@ -47,11 +48,11 @@ module Siwoti
         View.discovered_rumors(discovered_rumors)
       when /c/
         View.create_content(discovered_rumors)
-      # FIXME: development shortcut for cycling through the game fast
+      # TODO: development shortcut for cycling through the game fast
       when /e/
         current_player.hours -= 8
       else
-        puts "Command not recognized/implemented"
+        View.command_not_recognized(action)
       end
     end
 
@@ -94,7 +95,7 @@ module Siwoti
     end
 
     def round_over?
-      @current_player_number == @players.size
+      @current_player_number >= @players.size
     end
 
     def current_player
@@ -105,7 +106,7 @@ module Siwoti
       @current_player_number += 1
     end
 
-    # no winning condition (yet) :P You all lose!
+    # when is the game over? When the game is won, the game automatically exits.
     def game_over?
       if game_lost?
         View.game_lost
@@ -113,10 +114,6 @@ module Siwoti
       else
         false
       end
-    end
-
-    def view_graph
-      View.graph(graph)
     end
 
     def seed_rumors
@@ -134,6 +131,7 @@ module Siwoti
       @rumors.each { |rumor| rumor.increase_contamination }
       if rand < (NEW_RUMOR_CHANCE * players.size)
         new_rumor
+        View.new_rumor
       end
     end
 
@@ -151,9 +149,7 @@ module Siwoti
 
     def search_for_rumors(node, hours)
       if_player_has_time(hours) do
-        old_rumors = discovered_rumors
-        current_player.search_for_rumors(node, hours)
-        new_rumors = discovered_rumors - old_rumors
+        new_rumors = current_player.search_for_rumors(node, hours)
 
         if new_rumors.empty?
           View.no_rumors_found
@@ -171,20 +167,22 @@ module Siwoti
         content_value -= node.rumors[rumor]
         if content_value > 0
           rumor.decrease_contamination(content_value, node)
-          if rumor.extinct?
-            @rumors.delete(rumor)
-            @eliminated_rumors += 1
-            if game_won?
-              View.game_won
-              exit
-            else
-              View.eliminated_rumor(@eliminated_rumors)
-            end
-          end
           View.succesful_content_creation
+          eliminate_rumor(rumor) if rumor.extinct?
         else
           View.failed_content_creation
         end
+      end
+    end
+
+    def eliminate_rumor(rumor)
+      @rumors.delete(rumor)
+      @eliminated_rumors += 1
+      if game_won?
+        View.game_won
+        exit
+      else
+        View.eliminated_rumor(@eliminated_rumors)
       end
     end
 
@@ -192,15 +190,7 @@ module Siwoti
     # in every node of the graph
     def game_lost?
       @rumors.each do |rumor|
-        next if rumor.infected_nodes.size < graph.nodes.size
-        lost = true
-        rumor.infected_nodes.each do |node|
-          if node.rumors[rumor] <= 80
-            lost = false
-            break
-          end
-        end
-        return true if lost
+        return true if rumor.all_nodes_infected(graph.nodes, LOOSE_PERCENT)
       end
       false
     end

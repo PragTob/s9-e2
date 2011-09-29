@@ -20,8 +20,8 @@ module Siwoti
 
     def new_player(number)
       puts "Hey player #{number}! What's your name?"
-      puts "(Just hit Enter and I'll give you a name - whether you like it.)" +
-        " or not."
+      puts "(Just hit Enter and I'll give you a name - whether you like it" +
+        " or not.)"
       Game.add_player(gets.chomp)
     end
 
@@ -222,6 +222,18 @@ module Siwoti
       puts "You have now eliminated #{count} rumors."
       puts "You need to eliminate #{Game::ELIMINATED_RUMORS_TO_WIN} rumors " +
         "in order to win the game."
+    end
+
+    def new_rumor
+      puts "There is an uproar on the Internet..."
+      puts "It seems like a new rumor just has spread,"
+    end
+
+    def command_not_recognized(command)
+      puts "The command you just put in was not recognized."
+      puts "The command was #{command}."
+      puts "Please try again."
+      newline
     end
 
   end

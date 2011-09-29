@@ -57,6 +57,20 @@ module Siwoti
       @infected_nodes.empty?
     end
 
+    def all_nodes_infected(overall_nodes, percent)
+      # not all nodes infected
+      return if infected_nodes.size < overall_nodes.size
+
+      lost = true
+      infected_nodes.each do |node|
+        if node.rumors[self] <= percent
+          lost = false
+          break
+        end
+      end
+      return lost
+    end
+
     private
 
     def spread_from(node, spreading_value)
