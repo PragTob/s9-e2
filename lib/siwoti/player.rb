@@ -36,11 +36,15 @@ module Siwoti
     def search_for_rumors(node, time)
       @hours -= time
       search_value = (rand(100) * RUMOR_SEARCH_FACTOR) / time
+      discover_rumors(node, search_value)
+    end
+
+    def discover_rumors(node, search_value)
       discovered_rumors = []
 
       # now you get a chance to discover every rumor
       node.rumors.each do |rumor, contamination|
-        if search_value <= contamination && !rumor.discovered
+        if search_value <= contamination &&  !rumor.discovered
           rumor.discovered = true
           discovered_rumors << rumor
         end
