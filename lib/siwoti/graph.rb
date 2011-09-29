@@ -16,10 +16,6 @@ module Siwoti
       end
     end
 
-    def next_to(node)
-      @adjacents[node].to_a
-    end
-
     def nodes
       @adjacents.keys
     end
